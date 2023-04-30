@@ -1,0 +1,24 @@
+test_get:
+    path: /test
+    controller: App\Controller\TestController::index
+    methods: GET|HEAD
+
+test_get_by_id:
+    path: /test/{id}
+    controller: App\Controller\TestController::show
+    methods: GET
+
+test_post:
+    path: /test
+    controller: App\Controller\TestController::store
+    methods: POST
+
+test_put:
+    path: /test
+    controller: App\Controller\TestController::update
+    methods: PUT
+
+test_delete:
+    path: /test
+    controller: App\Controller\TestController::destroy
+    methods: DELETE
