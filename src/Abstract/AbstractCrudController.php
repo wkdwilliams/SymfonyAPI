@@ -33,10 +33,13 @@ abstract class AbstractCrudController extends AbstractController
 
     public function show(int $id): JsonResponse
     {
-        $data = $this->toResource($this->repository->find($id));
+        $data = $this->repository->find($id);
+
+        if($data === null)
+            throw new Error("Resource not found", 404);
 
         return $this->json([
-            'data' => $data
+            'data' => $this->toResource($data)
         ]);
     }
 
