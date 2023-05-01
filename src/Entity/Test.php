@@ -8,21 +8,40 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\DBAL\Types\Types;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TestRepository::class)]
 class Test extends AbstractEntity
 {
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
+    {
+        $metadata->addPropertyConstraint('name', new Assert\Length([
+            'min'        => 1,
+            'max'        => 20,
+            'minMessage' => 'Your name must be at least {{ limit }} characters long',
+            'maxMessage' => 'Your name cannot be longer than {{ limit }} characters',
+        ]));
+        $metadata->addPropertyConstraint('name', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('firstName', new Assert\Length([
+            'min'        => 1,
+            'max'        => 20,
+            'minMessage' => 'Your first name must be at least {{ limit }} characters long',
+            'maxMessage' => 'Your first name cannot be longer than {{ limit }} characters',
+        ]));
+        $metadata->addPropertyConstraint('firstName', new Assert\NotBlank());
+    }
+    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[NotBlank([])]
     private string $name;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[NotBlank([])]
     private string $firstName;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]

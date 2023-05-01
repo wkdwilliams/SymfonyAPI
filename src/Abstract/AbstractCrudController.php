@@ -1,5 +1,6 @@
 <?php
 
+use App\Abstract\ValidationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -51,6 +52,10 @@ abstract class AbstractCrudController extends AbstractController
         $entity->fromArray($request->toArray());
         $entity->setCreatedAt(new DateTime());
         $entity->setUpdatedAt(new DateTime());
+        
+        $validate = $this->validator->validate($entity);
+        if(count($validate) > 0)
+            throw new Error('Validation Error');
 
         $this->entityManager->persist($entity);
         $this->entityManager->flush();
@@ -68,6 +73,12 @@ abstract class AbstractCrudController extends AbstractController
             throw new Error("Resource not found", 404);
         
         $entity->fromArray($request->toArray());
+        $entity->setUpdatedAt(new DateTime());
+
+        $validate = $this->validator->validate($entity);
+        if(count($validate) > 0)
+            throw new Error('Validation Error');
+    
         $this->entityManager->flush();
 
         return $this->json([
