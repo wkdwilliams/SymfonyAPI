@@ -11,6 +11,7 @@ class TestResource extends JsonResource
         return [
             'id'         => $this->object->getId(),
             'name'       => $this->object->getName(),
+            'first_name' => $this->object->getFirstName(),
             'created_at' => $this->object->getCreatedAt(),
             'updated_at' => $this->object->getUpdatedAt()
         ];

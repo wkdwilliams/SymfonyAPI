@@ -2,13 +2,15 @@
 
 namespace App\Entity;
 
+use App\Abstract\AbstractEntity;
 use App\Repository\TestRepository;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\DBAL\Types\Types;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 #[ORM\Entity(repositoryClass: TestRepository::class)]
-class Test
+class Test extends AbstractEntity
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -16,7 +18,12 @@ class Test
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[NotBlank([])]
     private string $name;
+
+    #[ORM\Column(type: Types::TEXT)]
+    #[NotBlank([])]
+    private string $firstName;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private DateTime $created_at;
@@ -61,6 +68,18 @@ class Test
     public function setUpdatedAt(DateTime $updated_at): self
     {
         $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(string $firstName): self
+    {
+        $this->firstName = $firstName;
 
         return $this;
     }
