@@ -31,7 +31,7 @@ class Test extends AbstractEntity
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private DateTime $updated_at;
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }

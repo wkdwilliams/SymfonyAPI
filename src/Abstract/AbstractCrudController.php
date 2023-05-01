@@ -60,14 +60,34 @@ abstract class AbstractCrudController extends AbstractController
         ], 201);
     }
 
-    public function update(): JsonResponse
+    public function update(int $id, Request $request): JsonResponse
     {
-        return $this->json([]);
+        $entity = $this->repository->find($id); 
+
+        if($entity === null)
+            throw new Error("Resource not found", 404);
+        
+        $entity->fromArray($request->toArray());
+        $this->entityManager->flush();
+
+        return $this->json([
+            'data' => $this->toResource($entity)
+        ]);
     }
 
-    public function destroy(): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
-        return $this->json([]);
+        $entity = $this->repository->find($id);
+
+        if($entity === null)
+            throw new Error("Resource not found", 404);
+
+        $this->entityManager->remove($entity);
+        $this->entityManager->flush();
+ 
+        return $this->json([
+            'data' => $this->toResource($entity)
+        ]);
     }
 
     protected function toResource(object $object): array
